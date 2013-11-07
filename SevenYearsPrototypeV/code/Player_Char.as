@@ -16,6 +16,7 @@
 	import flash.events.Event; 
 	import flash.media.Sound; 
 	import flash.net.URLRequest; 
+	import flash.events.ActivityEvent;
 	
 	public class Player_Char extends MovieClip
 	{
@@ -50,6 +51,7 @@
 			playerHalfHeight = player.height*0.5;
 			
 			playMusic();
+			
 		}
 		
 		//*************************
