@@ -17,6 +17,12 @@
         public var downPressed:Boolean = false; //...down key pressed
 		
 		public var speed:Number = 5; //add this Number variable
+		
+		public var screenWidth:Number = 800;//378;
+		public var screenHeight:Number = 560;
+		public var screenX:Number = 0; //410; 
+		public var screenY:Number = 20;
+		public var playerHalfWidth:Number, playerHalfHeight:Number;
  
         public function Player(stageRef:Stage, X:int, Y:int):void //modify the constructor
         {
@@ -25,6 +31,9 @@
             this.y = Y;
 			
 			key = new KeyObject(stageRef); //instantiate "key" by passing it a reference to the stage
+			
+			playerHalfWidth = this.width*0.5;
+			playerHalfHeight = this.height*0.5;
 			
 			addEventListener(Event.ENTER_FRAME, loop, false, 0, true); //add the EventListener
         }
@@ -44,6 +53,20 @@
             } else if(downPressed){
                 y += speed; // move down if downPressed is true
             }
+			
+			// Stop the player (player) from moving off-screen.
+			if(this.y < (screenY + playerHalfHeight)){
+				this.y = screenY + playerHalfHeight; //if you're going up too far
+			}
+			if(this.y > (screenY + screenHeight - playerHalfHeight)){
+				this.y = screenY + screenHeight - playerHalfHeight; //if you're going down too far
+			}
+			if(this.x < (screenX + playerHalfWidth)){
+				this.x = screenX + playerHalfWidth; //if you're going left too far
+			}
+			if(this.x > (screenX + screenWidth - playerHalfWidth)){
+				this.x = screenX + screenWidth - playerHalfWidth; //if you're going right too far.
+			}
         }
 		public function checkKeypresses():void
         {
