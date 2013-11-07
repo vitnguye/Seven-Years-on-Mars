@@ -44,14 +44,18 @@
  
             if(leftPressed){
                 x -= speed; // move to the left if leftPressed is true
+				rotatePlayer(270);
             } else if(rightPressed){
                 x += speed; // move to the right if rightPressed is true
+				rotatePlayer(90);
             }
  
             if(upPressed){
                 y -= speed; // move up if upPressed is true
+				rotatePlayer(0);
             } else if(downPressed){
                 y += speed; // move down if downPressed is true
+				rotatePlayer(180);
             }
 			
 			// Stop the player (player) from moving off-screen.
@@ -96,5 +100,10 @@
             }
         }
 		
+		public function rotatePlayer(angle:Number):void{
+			this.rotation = angle;
+			playerHalfWidth = Math.pow(Math.pow(this.width*0.5*Math.cos(angle), 2) + Math.pow(this.height*0.5*Math.sin(angle), 2), 0.5);
+			playerHalfHeight = Math.pow(Math.pow(this.width*0.5*Math.sin(angle), 2) + Math.pow(this.height*0.5*Math.cos(angle), 2), 0.5);
+		}
     }
 }
