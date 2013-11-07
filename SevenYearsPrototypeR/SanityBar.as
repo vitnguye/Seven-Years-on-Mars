@@ -7,7 +7,7 @@
  
     public class SanityBar extends MovieClip
     {
-       var maxSanity:int = 100;
+       var maxSanity:int = 3000;
 var currentSanity:int = maxSanity;
 var percentSanity:Number = currentSanity / maxSanity;
  
@@ -22,7 +22,7 @@ var percentSanity:Number = currentSanity / maxSanity;
 		
 		public function loop(e:Event):void
         {
-            currentSanity -= 0.05;
+            currentSanity -= 1;
 			updateSanityBar();
         }
 		function updateSanityBar():void

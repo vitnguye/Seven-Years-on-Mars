@@ -5,6 +5,10 @@
     import flash.events.Event;
     import flash.events.ActivityEvent;
  
+	//for Music
+	import flash.media.Sound; 
+	import flash.net.URLRequest; 
+	
     public class Main extends MovieClip
     {
         public var player:Player;
@@ -19,6 +23,25 @@
             stage.addChild(player);
 			stage.addChild(activity1);
 			stage.addChild(sanitybar);
+			playMusic();
         }
+		
+		//for music
+		public function playMusic():void
+		{
+			trace("Hello");
+			var s:Sound = new Sound(); 
+			s.addEventListener(Event.COMPLETE, onSoundLoaded); 
+			var req:URLRequest = new URLRequest("Assets/Music/Running in the 90's.mp3"); 
+			s.load(req); 
+		}
+		
+		function onSoundLoaded(event:Event):void 
+		{ 
+			trace("there");
+			var localSound:Sound = event.target as Sound; 
+			localSound.play();
+		}
+		
     }
 }
