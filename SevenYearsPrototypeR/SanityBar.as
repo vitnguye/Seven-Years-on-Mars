@@ -27,6 +27,9 @@ var percentSanity:Number = currentSanity / maxSanity;
         }
 		function updateSanityBar():void
 {
+	if(currentSanity < 0){
+		currentSanity = 0;
+	}
      percentSanity = currentSanity / maxSanity;
      barColor.scaleX = percentSanity;
 }
