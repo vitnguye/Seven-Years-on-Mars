@@ -22,7 +22,7 @@ var percentSanity:Number = currentSanity / maxSanity;
 		
 		public function loop(e:Event):void
         {
-            currentSanity -= 0.2;
+            currentSanity -= 0.05;
 			updateSanityBar();
         }
 		function updateSanityBar():void
