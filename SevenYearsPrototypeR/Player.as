@@ -15,6 +15,7 @@
         public var rightPressed:Boolean = false; //same, but for right key pressed
         public var upPressed:Boolean = false; //...up key pressed
         public var downPressed:Boolean = false; //...down key pressed
+		public var spacePressed:Boolean = false; //...space bar pressed
 		
 		public var speed:Number = 5; //add this Number variable
 		
@@ -98,6 +99,11 @@
             } else {
                 downPressed = false;
             }
+			if(key.isDown(32)){
+				spacePressed = true;
+			}else{
+				spacePressed = false;
+			}
         }
 		
 		public function rotatePlayer(angle:Number):void{
