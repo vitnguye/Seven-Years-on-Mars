@@ -40,7 +40,7 @@
 		{ 
 			trace("there");
 			var localSound:Sound = event.target as Sound; 
-			localSound.play();
+			localSound.play(0,999);
 		}
 		
     }
