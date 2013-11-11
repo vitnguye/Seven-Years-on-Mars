@@ -45,18 +45,20 @@
  
             if(leftPressed){
                 x -= speed; // move to the left if leftPressed is true
-				rotatePlayer(270);
+				this.gotoAndStop("left");
+				//rotatePlayer(270);
             } else if(rightPressed){
                 x += speed; // move to the right if rightPressed is true
-				rotatePlayer(90);
-            }
- 
-            if(upPressed){
+				this.gotoAndStop("right");
+				//rotatePlayer(90);
+            }else if(upPressed){
                 y -= speed; // move up if upPressed is true
-				rotatePlayer(0);
+				this.gotoAndStop("up");
+				//rotatePlayer(0);
             } else if(downPressed){
                 y += speed; // move down if downPressed is true
-				rotatePlayer(180);
+				this.gotoAndStop("down");
+				//rotatePlayer(180);
             }
 			
 			// Stop the player (player) from moving off-screen.
