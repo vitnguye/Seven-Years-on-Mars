@@ -34,7 +34,7 @@
 		public function playMusic():void{
 			var s:Sound = new Sound(); 
 			s.addEventListener(Event.COMPLETE, onSoundLoaded); 
-			var req:URLRequest = new URLRequest("Assets/Music/Running in the 90's.mp3"); 
+			var req:URLRequest = new URLRequest("Assets/Music/Living in the Sunlight Loving in the Moonlight.mp3"); 
 			s.load(req); 
 		}
 		
