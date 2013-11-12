@@ -5,8 +5,8 @@
 	import KeyObject;
 	
 	public class Player extends MovieClip{
-		// Create an instance variable for the stage reference.
-		public var	stageRef:Stage,
+		// References to the game 'stage' and the main game manager.
+		public var	stageRef:Stage, mainRef:Main,
 		// A reference to this player's sanity bar.
 					sanityBarRef:SanityBar,
 		// A reference to the player's 'PlayerHand' object. This object will allow interaction with objects of
@@ -23,24 +23,27 @@
 					spacePressed:Boolean = false,
 		// The player's movement speed (in pixels per frame).
 					speed:Number = 5,
+		// The number of frames left until this player can open a door again.
+					doorCooldown:Number = 0,
 		// The player's current sanity value. The purpose of this game is to try and keep this as high as possible.
 					sanity:Number = 100,
 		// The location and size of the game screen the player is allowed to move in.
 		//	Width: 378, X: 410. What is this note for?
-					screenX:Number = 0, screenY:Number = 20,
-					screenWidth:Number = 800, screenHeight:Number = 560,
+					screenX:Number = 0, screenY:Number = 0,
+					screenWidth:Number = 800, screenHeight:Number = 600,
 		// Half the player's width and height. Saving this saves on math.
 					halfWidth:Number, halfHeight:Number;
 		
 		// Constructor.
-		public function Player(stageRef:Stage, sanitybar:SanityBar, X:int, Y:int):void{
+		public function Player(stageRef_:Stage, mainRef_:Main, sanitybar:SanityBar, X:int, Y:int):void{
 			// Initialize the player's location.
 			this.x = X; this.y = Y;
 			
 			halfWidth = this.width*0.5;
 			halfHeight = this.height*0.5;
 			
-			this.stageRef = stageRef;
+			this.stageRef = stageRef_;
+			this.mainRef = mainRef_;
 			this.sanityBarRef = sanitybar;
 			
 			this.hand = new PlayerHand(x, y);
@@ -117,6 +120,24 @@
 			if(sanity < 0){ sanity = 0; }
 			else if(sanity > 100){ sanity = 100; }
 			sanityBarRef.updateSanityBar(sanity);
+			
+			// Handle door logic.
+			--doorCooldown;
+			if(doorCooldown < 0){ doorCooldown = 0; }
+			for(var i:int = 0; i < mainRef.doors.length; ++i){
+				doorUpdate(mainRef.doors[i]);
+			}
+		}
+		public function doorUpdate(door:Door):void{
+			if(door.visible && (doorCooldown == 0)){
+				door.gotoAndStop("available");
+				// Constantly check for collision with the player's hand when the player is attempting interaction.
+				if(spacePressed && hand.hitTestObject(door)){
+					doorCooldown = 60;
+					door.openDoor();
+				}
+			}
+			else{ door.gotoAndStop("cooldown"); }
 		}
 		public function checkKeypresses():void{
 			// I used http://www.dakmm.com/?p=272 as a reference to get the keyCode numbers for each key.
@@ -136,7 +157,6 @@
 			if(key.isDown(32)){ spacePressed = true; }
 			else{ spacePressed = false; }
 		}
-		
 		public function rotatePlayer(angle:Number):void{
 			this.rotation = angle; hand.rotation = angle;
 			halfWidth = Math.pow(Math.pow(this.width*0.5*Math.cos(angle), 2) + Math.pow(this.height*0.5*Math.sin(angle), 2), 0.5);
