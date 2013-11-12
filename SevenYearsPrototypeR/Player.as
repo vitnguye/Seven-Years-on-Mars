@@ -7,6 +7,8 @@
 	public class Player extends MovieClip{
 		// References to the game 'stage' and the main game manager.
 		public var	stageRef:Stage, mainRef:Main,
+		// The screens to be displayed upon victory and loss.
+					winScreen:WinScreen, loseScreen:LoseScreen,
 		// A reference to this player's sanity bar.
 					sanityBarRef:SanityBar,
 		// A reference to the player's 'PlayerHand' object. This object will allow interaction with objects of
@@ -27,6 +29,8 @@
 					doorCooldown:Number = 0,
 		// The player's current sanity value. The purpose of this game is to try and keep this as high as possible.
 					sanity:Number = 100,
+		// Time remaining until victory (in frames).
+					timeRemaining:int = 0,
 		// The location and size of the game screen the player is allowed to move in.
 		//	Width: 378, X: 410. What is this note for?
 					screenX:Number = 0, screenY:Number = 0,
@@ -50,6 +54,10 @@
 			hand.stretch(halfWidth, hand.height);
 			stageRef.addChild(hand);
 			
+			// Two minutes until victory.
+			timeRemaining = 7200;
+			winScreen = new WinScreen(400, 300); loseScreen = new LoseScreen(400, 300);
+			
 			// Instantiate "key" by passing it a reference to the stage.
 			key = new KeyObject(stageRef);
 			
@@ -58,6 +66,14 @@
 		}
 		
 		public function loop(e:Event):void{
+			if(!visible){ return; }
+			
+			// Check if the 'R' key is pressed:
+			//if(key.isDown(82)){ restart(); }
+			
+			if(sanity <= 0){ lose(); }
+			--timeRemaining;
+			if(timeRemaining <= 0){ win(); }
 			checkKeypresses();
 			
 			// Move the player according to arrow key presses.
@@ -138,6 +154,15 @@
 				}
 			}
 			else{ door.gotoAndStop("cooldown"); }
+		}
+		public function win():void{
+			this.visible = false;
+			stage.addChild(winScreen);
+		}
+		public function lose():void{
+			this.visible = false;
+			loseScreen.timespanInfo.text = "You have survived for a total of " + (int)((7200-timeRemaining)/60) + " seconds.";
+			stage.addChild(loseScreen);
 		}
 		public function checkKeypresses():void{
 			// I used http://www.dakmm.com/?p=272 as a reference to get the keyCode numbers for each key.

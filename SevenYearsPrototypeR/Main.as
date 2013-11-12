@@ -16,6 +16,7 @@
 		// A vector containing the doors defined for this game.
 					doors:Vector.<Door>;
 		
+		// Constructor.
 		public function Main():void{
 			sanitybar = new SanityBar(600, 50);
 			stage.addChild(sanitybar);
@@ -95,7 +96,7 @@
 			doorD_Up.containedObjects = doorD_None.containedObjects;
 			
 			// Start in the beginning room, and add all doors create to the 'doors' vector.
-			doorA_Down.openDoor();
+			doorA_None.openDoor();
 			doors.push(doorA_None); doors.push(doorA_Down); doors.push(doorA_Left);
 			doors.push(doorB_Up);
 			doors.push(doorC_Right); doors.push(doorC_Down);

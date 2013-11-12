@@ -12,23 +12,23 @@
 		// The sanity change the player experiences when interacting with this object.
 					sanityEffect:Number = 0,
 		// The number of frames left until this object can be interacted with again.
-					cooldownCounter:Number = 0;
-		// for sound
-		public var interactSnd:Sound;
+					cooldownCounter:Number = 0,
+		// The sound this object will make when interacted with by the player.
+					interactSnd:Sound;
 		// Constructor.
 		public function UseableObject(player_:Player, X:int, Y:int, sanEffect:Number):void{
 			this.player = player_;
 			this.x = X; this.y = Y;
 			this.sanityEffect = sanEffect;
 			
+			// make an instance of the Interaction Sound
+			interactSnd = new InteractSound();
+			
 			// Add the listener allowing this component to update.
 			addEventListener(Event.ENTER_FRAME, loop, false, 0, true);
 			// Make this object look like its supposed to.
 			this.gotoAndStop("available");
 			this.visible = false;
-			
-			// make an instance of the Interaction Sound
-			interactSnd = new InteractSound();
 		}
 		public function loop(e:Event):void{
 			if(!visible){ return; }
@@ -41,14 +41,18 @@
 				if(player.spacePressed && player.hand.hitTestObject(this)){
 					cooldownCounter = 50;
 					this.gotoAndStop("cooldown");
-					// Effect the player's sanity appropriately.
-					player.sanity += sanityEffect;
-					// Decrease the effect of this object every time it is used.
-					sanityEffect *= 0.5;
-					// play the interact sound
-					interactSnd.play();
+					effect();
 				}
 			}
+		}
+		public function effect(){
+			// Effect the player's sanity appropriately.
+			player.sanity += sanityEffect;
+			stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+			// Decrease the effect of this object every time it is used.
+			sanityEffect *= 0.5;
+			
+			interactSnd.play();
 		}
 	}
 }
