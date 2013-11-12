@@ -1,40 +1,21 @@
-﻿package
-{
-    import flash.display.Stage;
-    import flash.display.MovieClip;
-    import flash.events.Event;
+﻿package{
+	import flash.display.Stage;
+	import flash.display.MovieClip;
 	
- 
-    public class SanityBar extends MovieClip
-    {
-       var maxSanity:int = 3000;
-var currentSanity:int = maxSanity;
-var percentSanity:Number = currentSanity / maxSanity;
- 
-        public function SanityBar(X:int, Y:int):void //modify the constructor
-        {
-            this.x = X;
-            this.y = Y;
-			
-			
-			addEventListener(Event.ENTER_FRAME, loop, false, 0, true); //add the EventListener
-        }
+	public class SanityBar extends MovieClip{
+		var currentSanity:int = 100;
 		
-		public function loop(e:Event):void
-        {
-            currentSanity -= 1;
-			updateSanityBar();
-        }
-		function updateSanityBar():void
-{
-	if(currentSanity < 0){
-		currentSanity = 0;
+		// Constructor.
+		public function SanityBar(X:int, Y:int):void{
+			this.x = X;
+			this.y = Y;
+		}
+		public function updateSanityBar(newSanity:Number):void{
+			currentSanity = newSanity;
+			if(currentSanity < 0){ currentSanity = 0; }
+			else if(currentSanity > 100){ currentSanity = 100; }
+			
+			barColor.scaleX = currentSanity*0.01;
+		}
 	}
-     percentSanity = currentSanity / maxSanity;
-     barColor.scaleX = percentSanity;
-}
-		
-           
-		
-    }
 }
