@@ -63,6 +63,7 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorA_None.setExit(400, 350);
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
+			doorA_None.containedObjects.push(new UseableObject(player, 300, 120, 0, false, "talkingBass"));
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 230, 20, true, "spinningChair_2"));
 			doorA_None.containedObjects.push(new UseableObject(player, 570, 450, 0, true, "diningTable"));
 			wall = new UseableObject(player, 700, 125, 0, true, "wallSquare"); wall.stretch(200, 50);
@@ -87,16 +88,21 @@
 			doorA_None.containedObjects.push(doorE_Left);
 			// An entrance from above, going down into this room.
 			doorA_Down.setExit(400, 100);
+			doorA_Down.stretch(100, 100);
+			doorA_Down.rotation = 180;
 			doorA_Down.containedObjects = doorA_None.containedObjects;
 			// An entrance from the right, going left into this room.
 			doorA_Left.setExit(800, 350);
-			doorA_Left.rotation = 90; doorA_Left.stretch(2, 20);
+			doorA_Left.stretch(100, 100);
+			doorA_Left.rotation = 270;
 			doorA_Left.containedObjects = doorA_None.containedObjects;
 			// An entrance from below, going up into this room.
 			doorA_Up.setExit(400, 600);
+			doorA_Up.stretch(100, 100);
 			doorA_Up.containedObjects = doorA_None.containedObjects;
 			// An entrance from the left, going right into this room.
 			doorA_Right.setExit(0, 350);
+			doorA_Right.stretch(100, 100);
 			doorA_Right.rotation = 90;
 			doorA_Right.containedObjects = doorA_None.containedObjects;
 			
@@ -104,9 +110,10 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorB_None.setExit(400, 350);
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
+			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, -10, true, "dolphinRide"));
 			doorB_None.containedObjects.push(doorA_Down);
 			// An entrance from below, going up into this room.
-			doorB_Up.setExit(400, 600);doorB_Up.stretch(20, 20);
+			doorB_Up.setExit(400, 600);doorB_Up.stretch(100, 100);
 			doorB_Up.containedObjects = doorB_None.containedObjects;
 			
 			// Create a room to the right of room A.
@@ -129,7 +136,8 @@
 			doorC_None.containedObjects.push(doorA_Left);
 			// An entrance from the left, going right into this room.
 			doorC_Right.setExit(0, 350);
-			doorC_Right.rotation = 90; doorC_Right.stretch(20, 20);
+			doorC_Right.stretch(100, 100);
+			doorC_Right.rotation = 90; 
 			doorC_Right.containedObjects = doorC_None.containedObjects;
 			
 			// Create a room below room A.
@@ -141,6 +149,8 @@
 			doorD_None.containedObjects.push(doorA_Up);
 			// An entrance from below, going up into this room.
 			doorD_Down.setExit(400, 0);
+			doorD_Down.stretch(100, 100);
+			doorD_Down.rotation = 180;
 			doorD_Down.containedObjects = doorD_None.containedObjects;
 			
 			// Create a room to the left of room A.
@@ -159,8 +169,8 @@
 			doorE_None.containedObjects.push(doorA_Right);
 			// An entrance from the left, going right into this room.
 			doorE_Left.setExit(800, 350);
-			doorE_Left.stretch(20, 20);
-			doorE_Left.rotation = 90;
+			doorE_Left.stretch(100, 100);
+			doorE_Left.rotation = 270;
 			doorE_Left.containedObjects = doorE_None.containedObjects;
 			
 			// Start in the beginning room, and add all doors create to the 'doors' vector.

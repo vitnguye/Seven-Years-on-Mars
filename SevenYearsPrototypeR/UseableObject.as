@@ -47,6 +47,9 @@
 				case "diningTable":
 					stretch(200, 100);
 					break;
+				case "dolphinRide":
+					stretch(150, 100);
+					break;
 				case "floor":
 					stretch(800, 500);
 					break;
@@ -71,14 +74,20 @@
 				case "rock":
 					stretch(20, 10);
 					break;
+				case "satelliteControlPanel":
+					stretch(100, 50);
+					break;
 				case "sink":
 					stretch(50, 30);
 					break;
+				case "skull":
+					stretch(50, 30);
+					break;
 				case "sockPuppet_1":
-					stretch(10, 15);
+					stretch(15, 20);
 					break;
 				case "sockPuppet_2":
-					stretch(10, 15);
+					stretch(15, 20);
 					break;
 				case "spinningChair_1":
 					stretch(50, 60);
@@ -88,6 +97,9 @@
 					break;
 				case "steelTable":
 					stretch(200, 100);
+					break;
+				case "talkingBass":
+					stretch(75, 50);
 					break;
 				case "television":
 					stretch(50, 80);
@@ -174,6 +186,22 @@
 					}
 					break;
 				case "diningTable":
+					break;
+				case "dolphinRide":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && player.hand.hitTestObject(this)){
+						cooldownCounter = 90;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
+						
+						interactSnd.play();
+					}
 					break;
 				case "floor":
 					break;
@@ -287,6 +315,22 @@
 						interactSnd.play();
 					}
 					break;
+				case "satelliteControlPanel":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && player.hand.hitTestObject(this)){
+						cooldownCounter = 50;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
+						
+						interactSnd.play();
+					}
+					break;
 				case "sink":
 					this.alpha = 1.0;
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
@@ -295,6 +339,22 @@
 						this.alpha = 0.6;
 						
 						player.sanity -= 1.5;
+						
+						interactSnd.play();
+					}
+					break;
+				case "skull":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && player.hand.hitTestObject(this)){
+						cooldownCounter = 50;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
 						
 						interactSnd.play();
 					}
@@ -379,6 +439,22 @@
 					}
 					break;
 				case "steelTable":
+					break;
+				case "talkingBass":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && player.hand.hitTestObject(this)){
+						cooldownCounter = 40;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
+						
+						interactSnd.play();
+					}
 					break;
 				case "television":
 					this.alpha = 1.0;
