@@ -51,5 +51,10 @@
 			// Move the player to imitate having just moved into a new screen.
 			player.movePlayer(exitX, exitY);
 		}
+		public function stretch(sizeX:int, sizeY:int):void{
+			width = sizeX; height = sizeY;
+			halfWidth = width*0.5;
+			halfHeight = height*0.5;
+		}
 	}
 }

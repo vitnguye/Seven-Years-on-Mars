@@ -90,7 +90,7 @@
 			doorA_Down.containedObjects = doorA_None.containedObjects;
 			// An entrance from the right, going left into this room.
 			doorA_Left.setExit(800, 350);
-			doorA_Left.rotation = 90;
+			doorA_Left.rotation = 90; doorA_Left.stretch(2, 20);
 			doorA_Left.containedObjects = doorA_None.containedObjects;
 			// An entrance from below, going up into this room.
 			doorA_Up.setExit(400, 600);
@@ -106,7 +106,7 @@
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
 			doorB_None.containedObjects.push(doorA_Down);
 			// An entrance from below, going up into this room.
-			doorB_Up.setExit(400, 600);
+			doorB_Up.setExit(400, 600);doorB_Up.stretch(20, 20);
 			doorB_Up.containedObjects = doorB_None.containedObjects;
 			
 			// Create a room to the right of room A.
@@ -129,7 +129,7 @@
 			doorC_None.containedObjects.push(doorA_Left);
 			// An entrance from the left, going right into this room.
 			doorC_Right.setExit(0, 350);
-			doorC_Right.rotation = 90;
+			doorC_Right.rotation = 90; doorC_Right.stretch(20, 20);
 			doorC_Right.containedObjects = doorC_None.containedObjects;
 			
 			// Create a room below room A.
@@ -159,6 +159,7 @@
 			doorE_None.containedObjects.push(doorA_Right);
 			// An entrance from the left, going right into this room.
 			doorE_Left.setExit(800, 350);
+			doorE_Left.stretch(20, 20);
 			doorE_Left.rotation = 90;
 			doorE_Left.containedObjects = doorE_None.containedObjects;
 			
