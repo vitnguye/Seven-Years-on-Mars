@@ -25,6 +25,11 @@
 					leftPressed:Boolean, rightPressed:Boolean,
 					upPressed:Boolean, downPressed:Boolean,
 					spacePressed:Boolean,
+		
+		//Boolean variables to keep track of the direction the player is facing(serves as pseudo-key-release variables).
+					facingLeft:Boolean, facingRight:Boolean,
+					facingUp:Boolean, facingDown:Boolean,
+		
 		// The player's movement speed (in pixels per frame).
 					speed:Number,
 		// The number of frames left until this player can open a door again.
@@ -66,6 +71,8 @@
 			leftPressed = false; rightPressed = false;
 			upPressed = false; downPressed = false;
 			spacePressed = false;
+			facingLeft = false; facingRight = false;
+			facingUp = false; facingDown = false;
 			
 			speed = 5;
 			doorCooldown = 0;
@@ -97,21 +104,37 @@
 			
 			// Move the player according to arrow key presses.
 			if(leftPressed){
+				facingDown = false;
+				facingUp = false;
+				facingLeft = true;
+				facingRight = false;
 				shiftPlayerX(-speed);
 				this.gotoAndStop("left");
 				rotatePlayer(Math.PI);
 			}
 			else if(rightPressed){
+				facingDown = false;
+				facingUp = false;
+				facingLeft = false;
+				facingRight = true;
 				shiftPlayerX(speed);
 				this.gotoAndStop("right");
 				rotatePlayer(0);
 			}
 			if(upPressed){
+				facingDown = false;
+				facingUp = true;
+				facingLeft = false;
+				facingRight = false;
 				shiftPlayerY(-speed);
-				this.gotoAndStop("up");
+				this.gotoAndStop("walkup");
 				rotatePlayer(Math.PI*0.5);
 			}
 			else if(downPressed){
+				facingDown = true;
+				facingUp = false;
+				facingLeft = false;
+				facingRight = false;
 				shiftPlayerY(speed);
 				this.gotoAndStop("down");
 				rotatePlayer(Math.PI*1.5);
@@ -125,6 +148,22 @@
 				if(rightPressed){ this.gotoAndStop("downRight"); rotatePlayer(Math.PI*1.75); }
 				else if(leftPressed){ this.gotoAndStop("downLeft"); rotatePlayer(Math.PI*1.25); }
 			}
+			
+			//tests for changing to idle sprite when no button is pressed
+			if(facingRight && !rightPressed && !leftPressed && !upPressed && !downPressed){
+				this.gotoAndStop("right");
+			}
+			if(facingLeft && !rightPressed && !leftPressed && !upPressed && !downPressed){
+				this.gotoAndStop("left");
+			}
+			if(facingUp && !rightPressed && !leftPressed && !upPressed && !downPressed){
+				this.gotoAndStop("up");
+			}
+			if(facingDown && !rightPressed && !leftPressed && !upPressed && !downPressed){
+				this.gotoAndStop("down");
+			}
+			
+			
 			
 			// Stop the player from moving off-screen.
 			// Stop the player from going above the stage.
