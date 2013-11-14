@@ -20,7 +20,7 @@
 			// If the given value is negative, display in red text.
 			if(valueDisplayed < 0){ this.num.textColor = 0xFF0000; }
 			// If the given value is positive, display in green text.
-			if(valueDisplayed > 0){ this.num.textColor = 0x00FF00; }
+			else if(valueDisplayed > 0){ this.num.textColor = 0x00FF00; }
 			// Otherwise display in white text.
 			else{ this.num.textColor = 0xFFFFFF; }
 			

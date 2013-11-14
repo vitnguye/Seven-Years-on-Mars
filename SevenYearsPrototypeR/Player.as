@@ -69,11 +69,11 @@
 			
 			speed = 5;
 			doorCooldown = 0;
-			sanity = 100; sanityLossRate = 0.105;
-			timeRemaining = 0; timeUntilWin = 3000;
+			sanity = 100; sanityLossRate = 0.13;
+			timeRemaining = 0; timeUntilWin = 7500;
 			
-			screenX = 0; screenY = 0;
-			screenWidth = 800; screenHeight = 600;
+			screenX = 0; screenY = 100;
+			screenWidth = 800; screenHeight = 500;
 			
 			this.hand = new PlayerHand(x, y);
 			stageRef.addChild(hand);
@@ -89,10 +89,10 @@
 			
 			if(!visible){ return; }
 			prevX = x; prevY = y;
+			// Make the player show in front of everything else.
+			hand.parent.setChildIndex(hand, hand.parent.numChildren-1);
+			this.parent.setChildIndex(this, this.parent.numChildren-1);
 			
-			if(sanity <= 0){ lose(); }
-			--timeRemaining;
-			if(timeRemaining <= 0){ win(); }
 			checkKeypresses();
 			
 			// Move the player according to arrow key presses.
@@ -150,6 +150,10 @@
 			else if(sanity > 100){ sanity = 100; }
 			sanityBarRef.updateSanityBar(sanity);
 			
+			if(sanity <= 0){ lose(); return; }
+			--timeRemaining;
+			if(timeRemaining <= 0){ win(); return; }
+			
 			// Handle door logic.
 			--doorCooldown;
 			if(doorCooldown < 0){ doorCooldown = 0; }
@@ -173,6 +177,7 @@
 			if(winScreen.parent == stage){ stage.removeChild(winScreen); }
 			stage.addChild(winScreen);
 			winScreen.visible = true;
+			spacePressed = false;
 		}
 		public function lose():void{
 			this.visible = false;
@@ -276,6 +281,7 @@
 			if(loseScreen.parent == stage){ stage.removeChild(loseScreen); }
 			stage.addChild(loseScreen);
 			loseScreen.visible = true;
+			spacePressed = false;
 		}
 		public function checkKeypresses():void{
 			// I used http://www.dakmm.com/?p=272 as a reference to get the keyCode numbers for each key.
