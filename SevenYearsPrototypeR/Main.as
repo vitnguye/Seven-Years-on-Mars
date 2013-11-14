@@ -173,7 +173,7 @@
 		
 		// Play the background music.
 		public function playMusic():void{
-			soundChannel = backgroundMusic.play();
+			soundChannel = backgroundMusic.play(0, 999);
 		}
 		
 		function onSoundLoaded(event:Event):void{
