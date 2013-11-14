@@ -15,61 +15,80 @@
 		//	the 'UseableObject' class that are within 5 pixels of the front of this player. 'Front' refers to
 		//	this player's rotation, where an angle of zero has the front facing straight down.
 					hand:PlayerHand,
-		
 		// Add this instance variable.
 					key:KeyObject,
+					
+		// The player's location in the previous frame. Primarily used for collisions.
+					prevX:int, prevY:int,
 		
 		// Boolean variables that track whether or not their corresponding keyboard keys are currently pressed.
-					leftPressed:Boolean = false, rightPressed:Boolean = false,
-					upPressed:Boolean = false, downPressed:Boolean = false,
-					spacePressed:Boolean = false,
+					leftPressed:Boolean, rightPressed:Boolean,
+					upPressed:Boolean, downPressed:Boolean,
+					spacePressed:Boolean,
 		// The player's movement speed (in pixels per frame).
-					speed:Number = 5,
+					speed:Number,
 		// The number of frames left until this player can open a door again.
-					doorCooldown:Number = 0,
-		// The player's current sanity value. The purpose of this game is to try and keep this as high as possible.
-					sanity:Number = 100,
-		// Time remaining until victory (in frames).
-					timeRemaining:int = 0,
+					doorCooldown:Number,
+		// The player's current sanity value and how much of it is lost every frame.
+					sanity:Number, sanityLossRate:Number,
+		// Time remaining until victory and the time the player needs to survive to win (both in frames).
+					timeRemaining:int, timeUntilWin:int,
+		
 		// The location and size of the game screen the player is allowed to move in.
 		//	Width: 378, X: 410. What is this note for?
-					screenX:Number = 0, screenY:Number = 0,
-					screenWidth:Number = 800, screenHeight:Number = 600,
+					screenX:Number, screenY:Number,
+					screenWidth:Number, screenHeight:Number,
 		// Half the player's width and height. Saving this saves on math.
 					halfWidth:Number, halfHeight:Number;
 		
 		// Constructor.
-		public function Player(stageRef_:Stage, mainRef_:Main, sanitybar:SanityBar, X:int, Y:int):void{
-			// Initialize the player's location.
-			this.x = X; this.y = Y;
-			
-			halfWidth = this.width*0.5;
-			halfHeight = this.height*0.5;
-			
+		public function Player(stageRef_:Stage, mainRef_:Main, sanitybar:SanityBar):void{
 			this.stageRef = stageRef_;
 			this.mainRef = mainRef_;
 			this.sanityBarRef = sanitybar;
-			
-			this.hand = new PlayerHand(x, y);
-			hand.stretch(halfWidth, hand.height);
-			stageRef.addChild(hand);
-			
-			// Two minutes until victory.
-			timeRemaining = 7200;
 			winScreen = new WinScreen(400, 300); loseScreen = new LoseScreen(400, 300);
 			
 			// Instantiate "key" by passing it a reference to the stage.
 			key = new KeyObject(stageRef);
 			
+			restart();
+			
 			// Add the listener allowing this component to update.
 			addEventListener(Event.ENTER_FRAME, loop, false, 0, true);
 		}
-		
-		public function loop(e:Event):void{
-			if(!visible){ return; }
+		public function restart():void{
+			prevX = 0; prevY = 0;
+			this.visible = true;
 			
+			halfWidth = this.width*0.5;
+			halfHeight = this.height*0.5;
+			
+			leftPressed = false; rightPressed = false;
+			upPressed = false; downPressed = false;
+			spacePressed = false;
+			
+			speed = 5;
+			doorCooldown = 0;
+			sanity = 100; sanityLossRate = 0.105;
+			timeRemaining = 0; timeUntilWin = 3000;
+			
+			screenX = 0; screenY = 0;
+			screenWidth = 800; screenHeight = 600;
+			
+			this.hand = new PlayerHand(x, y);
+			stageRef.addChild(hand);
+			this.gotoAndStop("right");
+			
+			// Frames until victory.
+			timeRemaining = timeUntilWin;
+			winScreen.visible = false; loseScreen.visible = false;
+		}
+		public function loop(e:Event):void{
 			// Check if the 'R' key is pressed:
-			//if(key.isDown(82)){ restart(); }
+			if(key.isDown(82)){ mainRef.restart(); }
+			
+			if(!visible){ return; }
+			prevX = x; prevY = y;
 			
 			if(sanity <= 0){ lose(); }
 			--timeRemaining;
@@ -78,61 +97,55 @@
 			
 			// Move the player according to arrow key presses.
 			if(leftPressed){
-				x -= speed;
-				rotatePlayer(90);
-				hand.x = x - halfWidth - hand.width;
+				shiftPlayerX(-speed);
 				this.gotoAndStop("left");
+				rotatePlayer(Math.PI);
 			}
 			else if(rightPressed){
-				x += speed;
-				rotatePlayer(270);
-				hand.x = x + halfWidth;
+				shiftPlayerX(speed);
 				this.gotoAndStop("right");
+				rotatePlayer(0);
 			}
 			if(upPressed){
-				y -= speed;
-				rotatePlayer(180);
-				hand.y = y - halfHeight - hand.height;
+				shiftPlayerY(-speed);
 				this.gotoAndStop("up");
+				rotatePlayer(Math.PI*0.5);
 			}
 			else if(downPressed){
-				y += speed;
-				rotatePlayer(0);
-				hand.y = y + halfHeight;
+				shiftPlayerY(speed);
 				this.gotoAndStop("down");
+				rotatePlayer(Math.PI*1.5);
 			}
 			// Rotate correctly for diagonal movement.
 			if(upPressed){
-				if(rightPressed){ rotatePlayer(225); hand.x -= hand.halfWidth; hand.y += hand.halfHeight; }
-				else if(leftPressed){ rotatePlayer(135); hand.x += hand.halfWidth; hand.y += hand.halfHeight; }
+				if(rightPressed){ this.gotoAndStop("upRight"); rotatePlayer(Math.PI*0.25); }
+				else if(leftPressed){ this.gotoAndStop("upLeft"); rotatePlayer(Math.PI*0.75); }
 			}
 			else if(downPressed){
-				if(rightPressed){ rotatePlayer(315); hand.x -= hand.halfWidth; hand.y -= hand.halfHeight; }
-				else if(leftPressed){ rotatePlayer(45); hand.x += hand.halfWidth; hand.y -= hand.halfHeight; }
+				if(rightPressed){ this.gotoAndStop("downRight"); rotatePlayer(Math.PI*1.75); }
+				else if(leftPressed){ this.gotoAndStop("downLeft"); rotatePlayer(Math.PI*1.25); }
 			}
-			if(!leftPressed && !rightPressed && (upPressed || downPressed)){ hand.x = x; }
-			if(!upPressed && !downPressed && (leftPressed || rightPressed)){ hand.y = y; }
 			
 			// Stop the player from moving off-screen.
 			// Stop the player from going above the stage.
-			if(this.y < (screenY + halfHeight)){
-				this.y = screenY + halfHeight;
+			if(y < (screenY + halfHeight)){
+				movePlayerY(screenY + halfHeight);
 			}
 			// Stop the player from going below the stage.
-			if(this.y > (screenY + screenHeight - halfHeight)){
-				this.y = screenY + screenHeight - halfHeight;
+			if(y > (screenY + screenHeight - halfHeight)){
+				movePlayerY(screenY + screenHeight - halfHeight);
 			}
 			// Stop the player from going left of the stage.
-			if(this.x < (screenX + halfWidth)){
-				this.x = screenX + halfWidth;
+			if(x < (screenX + halfWidth)){
+				movePlayerX(screenX + halfWidth);
 			}
 			// Stop the player from going right of the stage.
-			if(this.x > (screenX + screenWidth - halfWidth)){
-				this.x = screenX + screenWidth - halfWidth;
+			if(x > (screenX + screenWidth - halfWidth)){
+				movePlayerX(screenX + screenWidth - halfWidth);
 			}
 			
 			// Decrease player sanity.
-			sanity -= 0.1;
+			sanity -= sanityLossRate;
 			if(sanity < 0){ sanity = 0; }
 			else if(sanity > 100){ sanity = 100; }
 			sanityBarRef.updateSanityBar(sanity);
@@ -157,12 +170,112 @@
 		}
 		public function win():void{
 			this.visible = false;
+			if(winScreen.parent == stage){ stage.removeChild(winScreen); }
 			stage.addChild(winScreen);
+			winScreen.visible = true;
 		}
 		public function lose():void{
 			this.visible = false;
-			loseScreen.timespanInfo.text = "You have survived for a total of " + (int)((7200-timeRemaining)/60) + " seconds.";
+			// Calculate time survived as a portion of seven years.
+			var	years:Number = ((timeUntilWin - timeRemaining)*7)/timeUntilWin,
+				months:Number = (years%1)*12,
+				weeks:Number = (months%1)*4,
+				days:Number = (weeks%1)*7,
+				hours:Number = (days%1)*24,
+				minutes:Number = (hours%1)*60,
+				seconds:Number = (minutes%1)*60,
+				
+				timeSurvived:String = "",
+				descriptors:int = 0,
+				firstDescriptor:Boolean = true;
+			
+			years = (int)(years); if(years != 0){ ++descriptors; }
+			months = (int)(months); if(months != 0){ ++descriptors; }
+			weeks = (int)(weeks); if(weeks != 0){ ++descriptors; }
+			days = (int)(days); if(days != 0){ ++descriptors; }
+			hours = (int)(hours); if(hours != 0){ ++descriptors; }
+			minutes = (int)(minutes); if(minutes != 0){ ++descriptors; }
+			seconds = (int)(seconds); if(seconds != 0){ ++descriptors; }
+			if(descriptors == 1){ descriptors = 0; }
+			
+			if(years != 0){
+				--descriptors;
+				
+				timeSurvived += years;
+				if(years != 1){ timeSurvived += " years"; }
+				else{ timeSurvived += " year"; }
+				firstDescriptor = false;
+			}
+			if(months != 0){
+				--descriptors;
+				if(!firstDescriptor){
+					timeSurvived += ", ";
+					if(descriptors == 0){ timeSurvived += "and "; }
+				}
+				timeSurvived += months;
+				if(months != 1){ timeSurvived += " months"; }
+				else{ timeSurvived += " month"; }
+				firstDescriptor = false;
+			}
+			if(weeks != 0){
+				--descriptors;
+				if(!firstDescriptor){
+					timeSurvived += ",\n";
+					if(descriptors == 0){ timeSurvived += "and "; }
+				}
+				timeSurvived += weeks;
+				if(weeks != 1){ timeSurvived += " weeks"; }
+				else{ timeSurvived += " week"; }
+				firstDescriptor = false;
+			}
+			if(days != 0){
+				--descriptors;
+				if(!firstDescriptor){
+					timeSurvived += ", ";
+					if(descriptors == 0){ timeSurvived += "and "; }
+				}
+				timeSurvived += days;
+				if(days != 1){ timeSurvived += " days"; }
+				else{ timeSurvived += " day"; }
+				firstDescriptor = false;
+			}
+			if(hours != 0){
+				--descriptors;
+				if(!firstDescriptor){
+					timeSurvived += ",\n";
+					if(descriptors == 0){ timeSurvived += "and "; }
+				}
+				timeSurvived += hours;
+				if(hours != 1){ timeSurvived += " hours"; }
+				else{ timeSurvived += " hour"; }
+				firstDescriptor = false;
+			}
+			if(minutes != 0){
+				--descriptors;
+				if(!firstDescriptor){
+					timeSurvived += ", ";
+					if(descriptors == 0){ timeSurvived += "and "; }
+				}
+				timeSurvived += minutes;
+				if(minutes != 1){ timeSurvived += " minutes"; }
+				else{ timeSurvived += " minute"; }
+				firstDescriptor = false;
+			}
+			if(seconds != 0){
+				--descriptors;
+				if(!firstDescriptor){
+					timeSurvived += ", ";
+					if(descriptors == 0){ timeSurvived += "and "; }
+				}
+				timeSurvived += seconds;
+				if(seconds != 1){ timeSurvived += " seconds"; }
+				else{ timeSurvived += " second"; }
+				firstDescriptor = false;
+			}
+			loseScreen.timespanInfo.text = "You have survived " + timeSurvived + ".";
+			if(loseScreen.parent == stage){ stage.removeChild(loseScreen); }
 			stage.addChild(loseScreen);
+			loseScreen.visible = true;
 		}
 		public function checkKeypresses():void{
 			// I used http://www.dakmm.com/?p=272 as a reference to get the keyCode numbers for each key.
@@ -183,9 +296,27 @@
 			else{ spacePressed = false; }
 		}
 		public function rotatePlayer(angle:Number):void{
-			this.rotation = angle; hand.rotation = angle;
-			halfWidth = Math.pow(Math.pow(this.width*0.5*Math.cos(angle), 2) + Math.pow(this.height*0.5*Math.sin(angle), 2), 0.5);
-			halfHeight = Math.pow(Math.pow(this.width*0.5*Math.sin(angle), 2) + Math.pow(this.height*0.5*Math.cos(angle), 2), 0.5);
+			var angleDegrees:int = (angle*180)/Math.PI;
+			if(hand.rotation == angleDegrees){ return; }
+			
+			var	w:Number = width*0.5, h:Number = height*0.5, dirLength = Math.pow((w*w + h*h), 0.5);
+			halfWidth = w*Math.cos(angle);
+			halfHeight = h*Math.sin(angle);
+			
+			hand.x = x + halfWidth; hand.y = y - halfHeight;
+			hand.stretch(dirLength*0.95, 20);
+			hand.rotation = angleDegrees - 90;
+			
+			halfWidth = Math.abs(halfWidth); halfHeight = Math.abs(halfHeight);
 		}
+		public function shiftPlayer(X:int, Y:int){
+			x += X; y += Y;
+			hand.x += X; hand.y += Y;
+		}
+		public function shiftPlayerX(X:int){ shiftPlayer(X, 0); }
+		public function shiftPlayerY(Y:int){ shiftPlayer(0, Y); }
+		public function movePlayer(X:int, Y:int){ shiftPlayer(X - x, Y - y); }
+		public function movePlayerX(X:int){ shiftPlayer(X - x, 0); }
+		public function movePlayerY(Y:int){ shiftPlayer(0, Y - y); }
 	}
 }

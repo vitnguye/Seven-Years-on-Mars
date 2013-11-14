@@ -49,7 +49,7 @@
 				mainRef.currentObjects[i].visible = true;
 			}
 			// Move the player to imitate having just moved into a new screen.
-			player.x = exitX; player.y = exitY;
+			player.movePlayer(exitX, exitY);
 		}
 	}
 }
