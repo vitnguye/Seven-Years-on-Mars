@@ -20,16 +20,14 @@
 					
 		// The player's location in the previous frame. Primarily used for collisions.
 					prevX:int, prevY:int,
+		// A boolean keeping track of whether or not this game is paused.
+					pauseGame:Boolean,
 		
 		// Boolean variables that track whether or not their corresponding keyboard keys are currently pressed.
 					leftPressed:Boolean, rightPressed:Boolean,
 					upPressed:Boolean, downPressed:Boolean,
 					spacePressed:Boolean,
-		
-		//Boolean variables to keep track of the direction the player is facing(serves as pseudo-key-release variables).
-					facingLeft:Boolean, facingRight:Boolean,
-					facingUp:Boolean, facingDown:Boolean,
-		
+					rReleased:Boolean, pReleased:Boolean, mReleased:Boolean, qReleased:Boolean,
 		// The player's movement speed (in pixels per frame).
 					speed:Number,
 		// The number of frames left until this player can open a door again.
@@ -56,6 +54,7 @@
 			// Instantiate "key" by passing it a reference to the stage.
 			key = new KeyObject(stageRef);
 			
+			setDifficulty("normal");
 			restart();
 			
 			// Add the listener allowing this component to update.
@@ -64,6 +63,7 @@
 		public function restart():void{
 			prevX = 0; prevY = 0;
 			this.visible = true;
+			pauseGame = false;
 			
 			halfWidth = this.width*0.5;
 			halfHeight = this.height*0.5;
@@ -71,13 +71,12 @@
 			leftPressed = false; rightPressed = false;
 			upPressed = false; downPressed = false;
 			spacePressed = false;
-			facingLeft = false; facingRight = false;
-			facingUp = false; facingDown = false;
+			rReleased = false; pReleased = false; mReleased = false; qReleased = false;
 			
 			speed = 5;
 			doorCooldown = 0;
-			sanity = 100; sanityLossRate = 0.13;
-			timeRemaining = 0; timeUntilWin = 7500;
+			sanity = 100;
+			timeRemaining = 0;
 			
 			screenX = 0; screenY = 100;
 			screenWidth = 800; screenHeight = 500;
@@ -91,79 +90,64 @@
 			winScreen.visible = false; loseScreen.visible = false;
 		}
 		public function loop(e:Event):void{
-			// Check if the 'R' key is pressed:
-			if(key.isDown(82)){ mainRef.restart(); }
+			// Check if the 'Q' key is pressed: if it is, go to the main menu.
+			if(qReleased && key.isDown(81)){
+				qReleased = false;
+				mainRef.goToMainMenu();
+				pauseGame = true;
+			}
+			else if(!key.isDown(81)){ qReleased = true; }
+			// Check if the 'M' key is pressed: if it is, mute/unmute the game.
+			if(mReleased && key.isDown(77)){ mReleased = false; mainRef.toggleMusic(); }
+			else if(!key.isDown(77)){ mReleased = true; }
+			// Do nothing in this class after this point if in the menu.
+			if(mainRef.mainMenu.visible){ return; }
 			
-			if(!visible){ return; }
+			// Check if the 'R' key is pressed: if it is, restart the game.
+			if(rReleased && key.isDown(82)){ rReleased = false; mainRef.restart(); }
+			else if(!key.isDown(82)){ rReleased = true; }
+			// Check if the 'P' key is pressed: if it is, pause/unpause the game.
+			if(pReleased && key.isDown(80)){ pReleased = false; pauseGame = !pauseGame; }
+			else if(!key.isDown(80)){ pReleased = true; }
+			
+			if(!visible || pauseGame){ return; }
 			prevX = x; prevY = y;
 			// Make the player show in front of everything else.
 			hand.parent.setChildIndex(hand, hand.parent.numChildren-1);
 			this.parent.setChildIndex(this, this.parent.numChildren-1);
 			
-			checkKeypresses();
+			checkControls();
 			
 			// Move the player according to arrow key presses.
 			if(leftPressed){
-				facingDown = false;
-				facingUp = false;
-				facingLeft = true;
-				facingRight = false;
 				shiftPlayerX(-speed);
 				this.gotoAndStop("left");
-				rotatePlayer(Math.PI);
+				rotate(Math.PI);
 			}
 			else if(rightPressed){
-				facingDown = false;
-				facingUp = false;
-				facingLeft = false;
-				facingRight = true;
 				shiftPlayerX(speed);
 				this.gotoAndStop("right");
-				rotatePlayer(0);
+				rotate(0);
 			}
 			if(upPressed){
-				facingDown = false;
-				facingUp = true;
-				facingLeft = false;
-				facingRight = false;
 				shiftPlayerY(-speed);
-				this.gotoAndStop("walkup");
-				rotatePlayer(Math.PI*0.5);
+				this.gotoAndStop("up");
+				rotate(Math.PI*0.5);
 			}
 			else if(downPressed){
-				facingDown = true;
-				facingUp = false;
-				facingLeft = false;
-				facingRight = false;
 				shiftPlayerY(speed);
 				this.gotoAndStop("down");
-				rotatePlayer(Math.PI*1.5);
+				rotate(Math.PI*1.5);
 			}
 			// Rotate correctly for diagonal movement.
 			if(upPressed){
-				if(rightPressed){ this.gotoAndStop("upRight"); rotatePlayer(Math.PI*0.25); }
-				else if(leftPressed){ this.gotoAndStop("upLeft"); rotatePlayer(Math.PI*0.75); }
+				if(rightPressed){ this.gotoAndStop("upRight"); rotate(Math.PI*0.25); }
+				else if(leftPressed){ this.gotoAndStop("upLeft"); rotate(Math.PI*0.75); }
 			}
 			else if(downPressed){
-				if(rightPressed){ this.gotoAndStop("downRight"); rotatePlayer(Math.PI*1.75); }
-				else if(leftPressed){ this.gotoAndStop("downLeft"); rotatePlayer(Math.PI*1.25); }
+				if(rightPressed){ this.gotoAndStop("downRight"); rotate(Math.PI*1.75); }
+				else if(leftPressed){ this.gotoAndStop("downLeft"); rotate(Math.PI*1.25); }
 			}
-			
-			//tests for changing to idle sprite when no button is pressed
-			if(facingRight && !rightPressed && !leftPressed && !upPressed && !downPressed){
-				this.gotoAndStop("right");
-			}
-			if(facingLeft && !rightPressed && !leftPressed && !upPressed && !downPressed){
-				this.gotoAndStop("left");
-			}
-			if(facingUp && !rightPressed && !leftPressed && !upPressed && !downPressed){
-				this.gotoAndStop("up");
-			}
-			if(facingDown && !rightPressed && !leftPressed && !upPressed && !downPressed){
-				this.gotoAndStop("down");
-			}
-			
-			
 			
 			// Stop the player from moving off-screen.
 			// Stop the player from going above the stage.
@@ -322,7 +306,31 @@
 			loseScreen.visible = true;
 			spacePressed = false;
 		}
-		public function checkKeypresses():void{
+		public function setDifficulty(difficulty:String){
+			switch(difficulty){
+				case "easy":
+					sanityLossRate = 0.05;
+					timeUntilWin = 7020;
+					break;
+				case "normal":
+					sanityLossRate = 0.15;
+					timeUntilWin = 7020;
+					break;
+				case "hard":
+					sanityLossRate = 0.16;
+					timeUntilWin = 9000;
+					break;
+				case "nightmare":
+					sanityLossRate = 0.2;
+					timeUntilWin = 12000;
+					break;
+				default:
+					sanityLossRate = 1.0;
+					timeUntilWin = 12000;
+					break;
+			}
+		}
+		public function checkControls():void{
 			// I used http://www.dakmm.com/?p=272 as a reference to get the keyCode numbers for each key.
 			// Check if the left arrow key or 'A' are pressed:
 			if(key.isDown(37) || key.isDown(65)){ leftPressed = true; }
@@ -340,9 +348,9 @@
 			if(key.isDown(32)){ spacePressed = true; }
 			else{ spacePressed = false; }
 		}
-		public function rotatePlayer(angle:Number):void{
+		public function rotate(angle:Number):void{
 			var angleDegrees:int = (angle*180)/Math.PI;
-			if(hand.rotation == angleDegrees){ return; }
+			if(hand.rotation == (angleDegrees - 90)){ return; }
 			
 			var	w:Number = width*0.5, h:Number = height*0.5, dirLength = Math.pow((w*w + h*h), 0.5);
 			halfWidth = w*Math.cos(angle);

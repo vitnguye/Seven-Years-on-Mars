@@ -9,9 +9,10 @@
 	import flash.net.URLRequest; 
 	
 	public class Main extends MovieClip{
-		public var	player:Player,
+		public var	player:Player, mainMenu:MainMenu,
 					sanitybar:SanityBar,
-					backgroundMusic:Sound, soundChannel:SoundChannel,
+					soundChannel:SoundChannel, soundOn:Boolean,
+					backgroundMusic:Sound, menuMusic:Sound,
 		// A vector containing the objects currently onscreen.
 					currentObjects:Vector.<MovieClip>,
 		// A vector containing the doors defined for this game.
@@ -19,9 +20,11 @@
 		
 		// Constructor.
 		public function Main():void{
+			soundOn = false;
+			menuMusic = new Sound();
+			menuMusic.load(new URLRequest("Assets/Music/guile_stage.mp3"));
 			backgroundMusic = new Sound();
 			backgroundMusic.load(new URLRequest("Assets/Music/Living in the Sunlight Loving in the Moonlight.mp3"));
-			playMusic();
 			
 			sanitybar = new SanityBar(700, 30);
 			stage.addChild(sanitybar);
@@ -29,14 +32,21 @@
 			player = new Player(stage, this, sanitybar);
 			stage.addChild(player);
 			
-			makeDoors();
+			mainMenu = new MainMenu(this);
+			stage.addChild(mainMenu);
+			mainMenu.x = 400; mainMenu.y = 300;
+			
+			restart();
+			goToMainMenu();
 		}
 		public function restart():void{
-			soundChannel.stop();
-			playMusic();
-			
+			if(!mainMenu.visible){ restartMusic(); }
 			makeDoors();
 			player.restart();
+		}
+		public function goToMainMenu(){
+			mainMenu.visible = true;
+			restartMusic();
 		}
 		private function makeDoors(){
 			doors = new Vector.<Door>;
@@ -63,7 +73,7 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorA_None.setExit(400, 350);
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
-			doorA_None.containedObjects.push(new UseableObject(player, 300, 120, 0, false, "talkingBass"));
+			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, -20, true, "talkingBass"));
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 230, 20, true, "spinningChair_2"));
 			doorA_None.containedObjects.push(new UseableObject(player, 570, 450, 0, true, "diningTable"));
 			wall = new UseableObject(player, 700, 125, 0, true, "wallSquare"); wall.stretch(200, 50);
@@ -111,9 +121,11 @@
 			doorB_None.setExit(400, 350);
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, -10, true, "dolphinRide"));
+			doorB_None.containedObjects.push(new UseableObject(player, 200, 200, 100, true, "testAnimation"));
 			doorB_None.containedObjects.push(doorA_Down);
 			// An entrance from below, going up into this room.
-			doorB_Up.setExit(400, 600);doorB_Up.stretch(100, 100);
+			doorB_Up.setExit(400, 600);
+			doorB_Up.stretch(100, 100);
 			doorB_Up.containedObjects = doorB_None.containedObjects;
 			
 			// Create a room to the right of room A.
@@ -131,13 +143,13 @@
 			doorC_None.containedObjects.push(new UseableObject(player, 700, 165, 0, true, "sink"));
 			doorC_None.containedObjects.push(new UseableObject(player, 370, 330, 42, true, "chemistryTable"));
 			doorC_None.containedObjects.push(new UseableObject(player, 370, 545, 0, true, "steelTable"));
-			doorC_None.containedObjects.push(new UseableObject(player, 420, 500, 26, true, "microscope"));
+			doorC_None.containedObjects.push(new UseableObject(player, 420, 500, 26, false, "microscope"));
 			doorC_None.containedObjects.push(new UseableObject(player, 600, 330, 20, true, "spinningChair_1"));
 			doorC_None.containedObjects.push(doorA_Left);
 			// An entrance from the left, going right into this room.
 			doorC_Right.setExit(0, 350);
 			doorC_Right.stretch(100, 100);
-			doorC_Right.rotation = 90; 
+			doorC_Right.rotation = 90;
 			doorC_Right.containedObjects = doorC_None.containedObjects;
 			
 			// Create a room below room A.
@@ -159,12 +171,12 @@
 			doorE_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
 			doorE_None.containedObjects.push(new UseableObject(player, 450, 200, 25, true, "cubbyhole"));
 			doorE_None.containedObjects.push(new UseableObject(player, 50, 200, 25, true, "bookshelf"));
-			doorE_None.containedObjects.push(new UseableObject(player, 25, 480, 40, true, "television"));
+			doorE_None.containedObjects.push(new UseableObject(player, 25, 480, -40, true, "television"));
 			doorE_None.containedObjects.push(new UseableObject(player, 105, 480, 25, true, "gameConsole"));
 			doorE_None.containedObjects.push(new UseableObject(player, 140, 480, 20, true, "gameController"));
 			doorE_None.containedObjects.push(new UseableObject(player, 130, 520, 20, true, "gameBoard"));
-			doorE_None.containedObjects.push(new UseableObject(player, 472, 480, 22, true, "sockPuppet_1"));
-			doorE_None.containedObjects.push(new UseableObject(player, 485, 475, 22, true, "sockPuppet_2"));
+			doorE_None.containedObjects.push(new UseableObject(player, 472, 480, 28, true, "sockPuppet_1"));
+			doorE_None.containedObjects.push(new UseableObject(player, 485, 475, 28, true, "sockPuppet_2"));
 			doorE_None.containedObjects.push(new UseableObject(player, 640, 530, 34, true, "treadmill"));
 			doorE_None.containedObjects.push(doorA_Right);
 			// An entrance from the left, going right into this room.
@@ -183,13 +195,27 @@
 		}
 		
 		// Play the background music.
-		public function playMusic():void{
-			soundChannel = backgroundMusic.play(0, 999);
+		public function toggleMusic():void{
+			if(soundOn){
+				soundChannel.stop();
+				soundChannel.removeEventListener(Event.SOUND_COMPLETE, musicEnd, false);
+			}
+			else{
+				playMusic();
+				soundChannel.addEventListener(Event.SOUND_COMPLETE, musicEnd, false, 0, true);
+			}
+			soundOn = !soundOn;
 		}
-		
-		function onSoundLoaded(event:Event):void{
-			var localSound:Sound = event.target as Sound; 
-			localSound.play(0, 999);
+		public function musicEnd(e:Event):void{
+			playMusic();
+		}
+		public function restartMusic():void{
+			toggleMusic();
+			if(!soundOn){ toggleMusic(); }
+		}
+		private function playMusic():void{
+			if(mainMenu.visible){ soundChannel = menuMusic.play(); }
+			else{ soundChannel = backgroundMusic.play(); }
 		}
 	}
 }

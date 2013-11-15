@@ -33,7 +33,7 @@
 			this.exitX = exitX_; this.exitY = exitY_;
 		}
 		public function openDoor():void{
-			doorSnd.play();
+			if(player.mainRef.soundOn){ doorSnd.play(); }
 			var i:int = 0;
 			// Remove all interactable objects onscreen.
 			if(mainRef.currentObjects != null){
