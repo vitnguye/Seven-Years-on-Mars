@@ -28,6 +28,11 @@
 					upPressed:Boolean, downPressed:Boolean,
 					spacePressed:Boolean,
 					rReleased:Boolean, pReleased:Boolean, mReleased:Boolean, qReleased:Boolean,
+					
+		//Boolean variables that track what direction the player is facing. Used for animations
+					facingLeft:Boolean, facingRight:Boolean,
+					facingUp:Boolean, facingDown:Boolean,
+		
 		// The player's movement speed (in pixels per frame).
 					speed:Number,
 		// The number of frames left until this player can open a door again.
@@ -120,33 +125,71 @@
 			
 			// Move the player according to arrow key presses.
 			if(leftPressed){
+				facingLeft = true;
+				facingRight = false;
+				facingUp = false;
+				facingDown = false;
 				shiftPlayerX(-speed);
-				this.gotoAndStop("left");
+				this.gotoAndStop("walkleft");
 				rotate(Math.PI);
 			}
 			else if(rightPressed){
+				facingLeft = false;
+				facingRight = true;
+				facingUp = false;
+				facingDown = false;
 				shiftPlayerX(speed);
-				this.gotoAndStop("right");
+				this.gotoAndStop("walkright");
 				rotate(0);
 			}
 			if(upPressed){
+				facingLeft = false;
+				facingRight = false;
+				facingUp = true;
+				facingDown = false;
 				shiftPlayerY(-speed);
-				this.gotoAndStop("up");
+				this.gotoAndStop("walkup");
 				rotate(Math.PI*0.5);
 			}
 			else if(downPressed){
+				facingLeft = false;
+				facingRight = false;
+				facingUp = false;
+				facingDown = true;
 				shiftPlayerY(speed);
-				this.gotoAndStop("down");
+				this.gotoAndStop("walkdown");
 				rotate(Math.PI*1.5);
 			}
 			// Rotate correctly for diagonal movement.
 			if(upPressed){
-				if(rightPressed){ this.gotoAndStop("upRight"); rotate(Math.PI*0.25); }
-				else if(leftPressed){ this.gotoAndStop("upLeft"); rotate(Math.PI*0.75); }
+				if(rightPressed){ 
+					facingLeft = false;
+				facingRight = true;
+				facingUp = false;
+				facingDown = false;
+					this.gotoAndStop("walkupright"); rotate(Math.PI*0.25); }
+				else if(leftPressed){ this.gotoAndStop("walkupleft"); rotate(Math.PI*0.75); }
 			}
 			else if(downPressed){
-				if(rightPressed){ this.gotoAndStop("downRight"); rotate(Math.PI*1.75); }
-				else if(leftPressed){ this.gotoAndStop("downLeft"); rotate(Math.PI*1.25); }
+				if(rightPressed){ this.gotoAndStop("walkdownright"); rotate(Math.PI*1.75); }
+				else if(leftPressed){ this.gotoAndStop("walkdownleft"); rotate(Math.PI*1.25); }
+			}
+			
+			//test for no buttons pressed, sets idle sprite
+			if(!upPressed && !downPressed && !leftPressed && !rightPressed){
+				if(facingLeft){
+					this.gotoAndStop("left");
+				}
+				if(facingRight){
+					this.gotoAndStop("right");
+				}
+				if(facingUp){
+					this.gotoAndStop("up");
+				}
+				if(facingDown){
+					this.gotoAndStop("down");
+				}
+				
 			}
 			
 			// Stop the player from moving off-screen.
