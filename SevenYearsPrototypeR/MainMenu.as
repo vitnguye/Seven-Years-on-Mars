@@ -73,7 +73,7 @@
 								difficultyLevel = "normal";
 								break;
 						}
-						player.setDifficulty(this.difficulty.text);
+						player.setDifficulty(difficultyLevel);
 						mainRef.restart();
 					}
 					else if(this.difficultyDown.hitTestPoint(root.mouseX, root.mouseY)){

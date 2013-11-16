@@ -26,7 +26,7 @@
 			this.collisionEnabled = collidible;
 			this.ID = ID_;
 			
-			// make an instance of the Interaction Sound
+			// Give this object the default interaction sound.
 			interactSnd = new InteractSound();
 			
 			// Add the listener allowing this component to update.
@@ -101,6 +101,7 @@
 					break;
 				case "talkingBass":
 					stretch(75, 50);
+					interactSnd = new TalkingBass();
 					break;
 				case "television":
 					stretch(50, 80);
@@ -138,22 +139,6 @@
 		}
 		public function effect(){
 			switch(ID){
-				case "testAnimation":
-					this.alpha = 1.0;
-					// Constantly check for collision with the player's hand when the player is attempting interaction.
-					if(player.spacePressed && verifyCollision(player.hand)){
-						cooldownCounter = 30;
-						this.alpha = 0.6;
-						
-						// Effect the player's sanity appropriately.
-						player.sanity += sanityEffect;
-						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
-						// Decrease the effect of this object every time it is used.
-						sanityEffect = (int)(sanityEffect*1.0);
-						
-						if(player.mainRef.soundOn){ interactSnd.play(); }
-					}
-					break;
 				case "bookshelf":
 					this.alpha = 1.0;
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
@@ -208,14 +193,14 @@
 					this.alpha = 1.0;
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
-						cooldownCounter = 90;
+						cooldownCounter = 5;
 						this.alpha = 0.6;
 						
 						// Effect the player's sanity appropriately.
 						player.sanity += sanityEffect;
 						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
 						// Decrease the effect of this object every time it is used.
-						sanityEffect = (int)(sanityEffect*0.5);
+						sanityEffect -= 8;
 						
 						interactSnd.play();
 					}
@@ -470,7 +455,7 @@
 						// Decrease the effect of this object every time it is used.
 						sanityEffect = (int)(sanityEffect*0.5);
 						
-						interactSnd.play();
+						if(player.mainRef.soundOn){ interactSnd.play(); }
 					}
 					break;
 				case "television":
