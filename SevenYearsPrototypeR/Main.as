@@ -93,8 +93,8 @@
 			doorA_None.containedObjects.push(wall);
 			doorA_None.containedObjects.push(new UseableObject(player, 620, 150, 35, true, "satelliteControlPanel"));
 			doorA_None.containedObjects.push(new UseableObject(player, 100, 150, 15, true, "talkingBass"));
-			doorA_None.containedObjects.push(new UseableObject(player, 180, 500, -30, true, "pony"));
-			doorA_None.containedObjects.push(new UseableObject(player, 700, 250, 28, true, "co2Scrubber"));
+			doorA_None.containedObjects.push(new UseableObject(player, 180, 500, -20, true, "pony"));
+			doorA_None.containedObjects.push(new UseableObject(player, 700, 250, 40, true, "co2Scrubber"));
 			doorA_None.containedObjects.push(doorB_Up);
 			doorA_None.containedObjects.push(doorC_Right);
 			doorA_None.containedObjects.push(doorD_Down);
@@ -123,7 +123,7 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorB_None.setExit(400, 350);
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
-			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, -30, true, "dolphinRide"));
+			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, 40, true, "dolphinRide"));
 			doorB_None.containedObjects.push(new UseableObject(player, 200, 200, 40, true, "rover"));
 			doorB_None.containedObjects.push(new UseableObject(player, 100, 200, 0, true, "robotArm"));
 			doorB_None.containedObjects.push(doorA_Down);

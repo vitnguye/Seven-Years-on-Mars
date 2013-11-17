@@ -632,7 +632,6 @@
 						this.alpha = 0.6;
 						
 						// Effect the player's sanity appropriately.
-						if((player.sanity < 30) && (sanityEffect > 0)){ sanityEffect = -sanityEffect; }
 						player.sanity += sanityEffect;
 						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
 						// Decrease the effect of this object every time it is used.
