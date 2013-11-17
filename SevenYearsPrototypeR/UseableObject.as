@@ -38,18 +38,22 @@
 			switch(ID){
 				case "bookshelf":
 					stretch(100, 200);
+					interactSnd = new PageFlip();
 					break;
 				case "chemistryTable":
 					stretch(200, 100);
 					break;
 				case "cubbyhole":
 					stretch(700, 200);
+					interactSnd = new Snoring();
 					break;
 				case "diningTable":
 					stretch(200, 100);
+					interactSnd = new Eating();
 					break;
 				case "dolphinRide":
 					stretch(150, 100);
+					interactSnd = new Dolphin();
 					break;
 				case "floor":
 					stretch(800, 500);
@@ -59,9 +63,11 @@
 					break;
 				case "gameConsole":
 					stretch(30, 10);
+					interactSnd = new GameStation();
 					break;
 				case "gameController":
 					stretch(10, 10);
+					interactSnd = new ButtonMashing();
 					break;
 				case "garden":
 					stretch(800, 500);
@@ -108,6 +114,7 @@
 					break;
 				case "treadmill":
 					stretch(100, 50);
+					interactSnd = new Treadmill();
 					break;
 				case "waterPot":
 					stretch(35, 20);
@@ -188,6 +195,20 @@
 					}
 					break;
 				case "diningTable":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && verifyCollision(player.hand)){
+						cooldownCounter = 50;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
+						
+						if(player.mainRef.soundOn){ interactSnd.play(); }
+					}
 					break;
 				case "dolphinRide":
 					this.alpha = 1.0;

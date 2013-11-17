@@ -73,9 +73,9 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorA_None.setExit(400, 350);
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
-			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, -20, true, "talkingBass"));
+			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, -10, true, "talkingBass"));
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 230, 20, true, "spinningChair_2"));
-			doorA_None.containedObjects.push(new UseableObject(player, 570, 450, 0, true, "diningTable"));
+			doorA_None.containedObjects.push(new UseableObject(player, 570, 450, 10, true, "diningTable"));
 			wall = new UseableObject(player, 700, 125, 0, true, "wallSquare"); wall.stretch(200, 50);
 			doorA_None.containedObjects.push(wall);
 			wall = new UseableObject(player, 775, 200, 0, true, "wallSquare"); wall.stretch(50, 200);
@@ -170,7 +170,7 @@
 			doorE_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
 			doorE_None.containedObjects.push(new UseableObject(player, 450, 200, 25, true, "cubbyhole"));
 			doorE_None.containedObjects.push(new UseableObject(player, 50, 200, 25, true, "bookshelf"));
-			doorE_None.containedObjects.push(new UseableObject(player, 25, 480, -40, true, "television"));
+			doorE_None.containedObjects.push(new UseableObject(player, 25, 480, 25, true, "television"));
 			doorE_None.containedObjects.push(new UseableObject(player, 105, 480, 25, true, "gameConsole"));
 			doorE_None.containedObjects.push(new UseableObject(player, 140, 480, 20, true, "gameController"));
 			doorE_None.containedObjects.push(new UseableObject(player, 130, 520, 20, true, "gameBoard"));
