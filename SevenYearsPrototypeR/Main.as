@@ -122,7 +122,7 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorB_None.setExit(400, 350);
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
-			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, 20, true, "dolphinRide"));
+			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, 10, false, "dolphinRide"));
 			doorB_None.containedObjects.push(doorA_Down);
 			// An entrance from below, going up into this room.
 			doorB_Up.setExit(400, 600);
