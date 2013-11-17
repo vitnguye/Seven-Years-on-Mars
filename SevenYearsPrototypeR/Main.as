@@ -22,7 +22,7 @@
 		public function Main():void{
 			soundOn = false;
 			menuMusic = new Sound();
-			menuMusic.load(new URLRequest("Assets/Music/guile_stage.mp3"));
+			menuMusic.load(new URLRequest("Assets/Music/Light Hearted.mp3"));
 			backgroundMusic = new Sound();
 			backgroundMusic.load(new URLRequest("Assets/Music/Living in the Sunlight Loving in the Moonlight.mp3"));
 			
