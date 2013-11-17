@@ -42,6 +42,7 @@
 					break;
 				case "chemistryTable":
 					stretch(200, 100);
+					interactSnd = new Bubbling();
 					break;
 				case "cubbyhole":
 					stretch(700, 200);
@@ -83,6 +84,7 @@
 					break;
 				case "satelliteControlPanel":
 					stretch(100, 50);
+					interactSnd = new Computer();
 					break;
 				case "sink":
 					stretch(50, 30);
@@ -106,7 +108,7 @@
 					stretch(200, 100);
 					break;
 				case "talkingBass":
-					stretch(75, 50);
+					stretch(50, 25);
 					interactSnd = new TalkingBass();
 					break;
 				case "television":

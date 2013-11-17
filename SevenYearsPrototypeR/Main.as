@@ -73,7 +73,6 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorA_None.setExit(400, 350);
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
-			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, -10, true, "talkingBass"));
 			doorA_None.containedObjects.push(new UseableObject(player, 400, 230, 20, true, "spinningChair_2"));
 			doorA_None.containedObjects.push(new UseableObject(player, 570, 450, 10, true, "diningTable"));
 			wall = new UseableObject(player, 700, 125, 0, true, "wallSquare"); wall.stretch(200, 50);
@@ -92,6 +91,8 @@
 			doorA_None.containedObjects.push(wall);
 			wall = new UseableObject(player, 25, 500, 0, true, "wallSquare"); wall.stretch(50, 200);
 			doorA_None.containedObjects.push(wall);
+			doorA_None.containedObjects.push(new UseableObject(player, 570, 120, 20, true, "satelliteControlPanel"));
+			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, -10, true, "talkingBass"));
 			doorA_None.containedObjects.push(doorB_Up);
 			doorA_None.containedObjects.push(doorC_Right);
 			doorA_None.containedObjects.push(doorD_Down);
