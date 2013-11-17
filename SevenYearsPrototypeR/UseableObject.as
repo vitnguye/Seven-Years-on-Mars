@@ -79,6 +79,9 @@
 				case "microscope":
 					stretch(10, 30);
 					break;
+				case "pony":
+					stretch(100, 75);
+					break;
 				case "rock":
 					stretch(20, 10);
 					break;
@@ -324,6 +327,22 @@
 						sanityEffect = (int)(sanityEffect*0.95);
 						
 						if(player.mainRef.soundOn){ interactSnd.play(); }
+					}
+					break;
+				case "pony":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && verifyCollision(player.hand)){
+						cooldownCounter = 50;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
+						
+						interactSnd.play();
 					}
 					break;
 				case "rock":
