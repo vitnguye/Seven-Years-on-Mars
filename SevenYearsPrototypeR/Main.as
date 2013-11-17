@@ -92,8 +92,8 @@
 			wall = new UseableObject(player, 25, 500, 0, true, "wallSquare"); wall.stretch(50, 200);
 			doorA_None.containedObjects.push(wall);
 			doorA_None.containedObjects.push(new UseableObject(player, 570, 120, 20, true, "satelliteControlPanel"));
-			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, -10, true, "talkingBass"));
-			doorA_None.containedObjects.push(new UseableObject(player, 180, 500, -10, true, "pony"));
+			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, 15, true, "talkingBass"));
+			doorA_None.containedObjects.push(new UseableObject(player, 180, 500, -20, false, "pony"));
 			doorA_None.containedObjects.push(doorB_Up);
 			doorA_None.containedObjects.push(doorC_Right);
 			doorA_None.containedObjects.push(doorD_Down);

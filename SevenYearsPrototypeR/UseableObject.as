@@ -330,7 +330,8 @@
 					}
 					break;
 				case "pony":
-					this.alpha = 1.0;
+					if((player.sanity < 50)){this.alpha = 1.0;}
+					else{this.alpha = 0.0;}
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
 						cooldownCounter = 50;
@@ -348,7 +349,7 @@
 				case "rock":
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
-						cooldownCounter = 0;
+						cooldownCounter = 50;
 						
 						// Effect the player's sanity appropriately.
 						player.sanity += sanityEffect;
@@ -492,10 +493,11 @@
 						this.alpha = 0.6;
 						
 						// Effect the player's sanity appropriately.
+						if((player.sanity < 30) && (sanityEffect > 0)){ sanityEffect = -sanityEffect; }
 						player.sanity += sanityEffect;
 						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
 						// Decrease the effect of this object every time it is used.
-						sanityEffect = (int)(sanityEffect*0.5);
+						sanityEffect = (int)(sanityEffect*0.7);
 						
 						if(player.mainRef.soundOn){ interactSnd.play(); }
 					}
