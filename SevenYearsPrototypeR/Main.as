@@ -24,8 +24,8 @@
 			menuMusic = new Sound();
 			menuMusic.load(new URLRequest("Assets/Music/Light Hearted.mp3"));
 			backgroundMusic = new Sound();
-			backgroundMusic.load(new URLRequest("Assets/Music/Living in the Sunlight Loving in the Moonlight.mp3"));
-			
+			backgroundMusic.load(new URLRequest("Assets/Music/Windy.mp3"));
+			//backgroundMusic.load(new URLRequest("Assets/Music/Living in the Sunlight Loving in the Moonlight.mp3"));
 			sanitybar = new SanityBar(700, 30);
 			stage.addChild(sanitybar);
 			
@@ -91,9 +91,10 @@
 			doorA_None.containedObjects.push(wall);
 			wall = new UseableObject(player, 25, 500, 0, true, "wallSquare"); wall.stretch(50, 200);
 			doorA_None.containedObjects.push(wall);
-			doorA_None.containedObjects.push(new UseableObject(player, 570, 120, 20, true, "satelliteControlPanel"));
-			doorA_None.containedObjects.push(new UseableObject(player, 280, 120, 15, true, "talkingBass"));
+			doorA_None.containedObjects.push(new UseableObject(player, 620, 150, 35, true, "satelliteControlPanel"));
+			doorA_None.containedObjects.push(new UseableObject(player, 100, 150, 15, true, "talkingBass"));
 			doorA_None.containedObjects.push(new UseableObject(player, 180, 500, -20, false, "pony"));
+			doorA_None.containedObjects.push(new UseableObject(player, 700, 250, 40, true, "co2Scrubber"));
 			doorA_None.containedObjects.push(doorB_Up);
 			doorA_None.containedObjects.push(doorC_Right);
 			doorA_None.containedObjects.push(doorD_Down);
@@ -122,7 +123,9 @@
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorB_None.setExit(400, 350);
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
-			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, 10, false, "dolphinRide"));
+			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, 40, false, "dolphinRide"));
+			doorB_None.containedObjects.push(new UseableObject(player, 200, 200, 40, true, "rover"));
+			doorB_None.containedObjects.push(new UseableObject(player, 100, 200, 0, true, "robotArm"));
 			doorB_None.containedObjects.push(doorA_Down);
 			// An entrance from below, going up into this room.
 			doorB_Up.setExit(400, 600);
@@ -139,12 +142,12 @@
 			doorC_None.containedObjects.push(wall);
 			doorC_None.containedObjects.push(new UseableObject(player, 150, 125, 25, true, "whiteBoard"));
 			doorC_None.containedObjects.push(new UseableObject(player, 270, 125, 25, true, "whiteBoard"));
-			doorC_None.containedObjects.push(new UseableObject(player, 420, 175, 20, true, "rock"));
+			doorC_None.containedObjects.push(new UseableObject(player, 420, 175, 30, true, "rock"));
 			doorC_None.containedObjects.push(new UseableObject(player, 400, 165, 18, true, "magnifyingGlass"));
 			doorC_None.containedObjects.push(new UseableObject(player, 700, 165, 0, true, "sink"));
 			doorC_None.containedObjects.push(new UseableObject(player, 370, 330, 42, true, "chemistryTable"));
 			doorC_None.containedObjects.push(new UseableObject(player, 370, 545, 0, true, "steelTable"));
-			doorC_None.containedObjects.push(new UseableObject(player, 420, 500, 26, false, "microscope"));
+			doorC_None.containedObjects.push(new UseableObject(player, 420, 500, 35, false, "microscope"));
 			doorC_None.containedObjects.push(new UseableObject(player, 600, 330, 20, true, "spinningChair_1"));
 			doorC_None.containedObjects.push(doorA_Left);
 			// An entrance from the left, going right into this room.
@@ -172,13 +175,14 @@
 			doorE_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
 			doorE_None.containedObjects.push(new UseableObject(player, 450, 200, 25, true, "cubbyhole"));
 			doorE_None.containedObjects.push(new UseableObject(player, 50, 200, 25, true, "bookshelf"));
-			doorE_None.containedObjects.push(new UseableObject(player, 25, 480, 25, true, "television"));
+			doorE_None.containedObjects.push(new UseableObject(player, 25, 480, 45, true, "television"));
 			doorE_None.containedObjects.push(new UseableObject(player, 105, 480, 25, true, "gameConsole"));
 			doorE_None.containedObjects.push(new UseableObject(player, 140, 480, 20, true, "gameController"));
 			doorE_None.containedObjects.push(new UseableObject(player, 130, 520, 20, true, "gameBoard"));
 			doorE_None.containedObjects.push(new UseableObject(player, 472, 480, 28, true, "sockPuppet_1"));
 			doorE_None.containedObjects.push(new UseableObject(player, 485, 475, 28, true, "sockPuppet_2"));
 			doorE_None.containedObjects.push(new UseableObject(player, 640, 530, 34, true, "treadmill"));
+			doorE_None.containedObjects.push(new UseableObject(player, 450, 340, -10, false, "skull"));
 			doorE_None.containedObjects.push(doorA_Right);
 			// An entrance from the left, going right into this room.
 			doorE_Left.setExit(800, 350);

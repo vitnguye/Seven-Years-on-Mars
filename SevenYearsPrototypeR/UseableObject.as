@@ -40,6 +40,9 @@
 					stretch(100, 200);
 					interactSnd = new PageFlip();
 					break;
+				case "co2Scrubber":
+					stretch(75,125);
+					break;
 				case "chemistryTable":
 					stretch(200, 100);
 					interactSnd = new Bubbling();
@@ -82,8 +85,14 @@
 				case "pony":
 					stretch(100, 75);
 					break;
+				case "robotArm":
+					stretch(75,100);
+					break;
 				case "rock":
-					stretch(20, 10);
+					stretch(30, 20);
+					break;
+				case "rover":
+					stretch(75, 50);
 					break;
 				case "satelliteControlPanel":
 					stretch(100, 50);
@@ -93,7 +102,7 @@
 					stretch(50, 30);
 					break;
 				case "skull":
-					stretch(50, 30);
+					stretch(15, 10);
 					break;
 				case "sockPuppet_1":
 					stretch(10, 15);
@@ -167,6 +176,21 @@
 						if(player.mainRef.soundOn){ interactSnd.play(); }
 					}
 					break;
+				case "co2Scrubber":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && verifyCollision(player.hand)){
+						cooldownCounter = 50;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.7);
+						
+						if(player.mainRef.soundOn){ interactSnd.play(); }
+					}
+					break
 				case "chemistryTable":
 					this.alpha = 1.0;
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
@@ -220,8 +244,7 @@
 					else{this.alpha = 0.0;}
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
-						cooldownCounter = 50;
-						this.alpha = 0.6;
+						cooldownCounter = 60;
 						
 						// Effect the player's sanity appropriately.
 						player.sanity += sanityEffect;
@@ -352,10 +375,28 @@
 						interactSnd.play();
 					}
 					break;
+				case "robotArm":
+					break;
 				case "rock":
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
 						cooldownCounter = 50;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.0);
+						
+						if(player.mainRef.soundOn){ interactSnd.play(); }
+					}
+					break;
+				case "rover":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && verifyCollision(player.hand)){
+						cooldownCounter = 50;
+						this.alpha = 0.6;
 						
 						// Effect the player's sanity appropriately.
 						player.sanity += sanityEffect;
@@ -395,7 +436,8 @@
 					}
 					break;
 				case "skull":
-					this.alpha = 1.0;
+					if((player.sanity < 50)){this.alpha = 1.0;}
+					else{this.alpha = 0.0;}
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
 						cooldownCounter = 50;
