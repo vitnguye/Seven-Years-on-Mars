@@ -61,12 +61,15 @@
 					doorA_Up:Door = new Door(this, player, 400, 100),			
 				doorB_None:Door = new Door(this, player, 0, 0),
 					doorB_Up:Door = new Door(this, player, 400, 100),
+					doorB_Down:Door = new Door(this, player, 700, 600),
 				doorC_None:Door = new Door(this, player, 0, 0),
 					doorC_Right:Door = new Door(this, player, 800, 350),
 				doorD_None:Door = new Door(this, player, 0, 0),
 					doorD_Down:Door = new Door(this, player, 400, 600),
 				doorE_None:Door = new Door(this, player, 0, 0),
 					doorE_Left:Door = new Door(this, player, 0, 350),
+				doorF_None:Door = new Door(this, player, 0,0),
+					doorF_Up:Door = new Door(this, player, 700, 100),
 				wall:UseableObject;
 			
 			// Create the beginning room.
@@ -126,13 +129,19 @@
 			doorB_None.containedObjects.push(new UseableObject(player, 400, 300, -30, true, "dolphinRide"));
 			doorB_None.containedObjects.push(new UseableObject(player, 200, 200, 40, true, "rover"));
 			doorB_None.containedObjects.push(new UseableObject(player, 100, 200, 0, true, "robotArm"));
-			doorB_None.containedObjects.push(new UseableObject(player, 700, 150, 30, true, "satelliteControlPanel"));
+			doorB_None.containedObjects.push(new UseableObject(player, 400, 150, 30, true, "satelliteControlPanel"));
+			doorB_None.containedObjects.push(new UseableObject(player, 700, 250, 10, true, "clock"));
 			doorB_None.containedObjects.push(doorA_Down);
+			doorB_None.containedObjects.push(doorF_Up);
 			// An entrance from below, going up into this room.
 			doorB_Up.setExit(400, 600);
 			doorB_Up.stretch(100, 100);
 			doorB_Up.containedObjects = doorB_None.containedObjects;
-			
+			// An entrance from above, going down into this room.
+			doorB_Down.setExit(700, 100);
+			doorB_Down.stretch(100, 100);
+			doorB_Down.rotation = 180;
+			doorB_Down.containedObjects = doorB_None.containedObjects;
 			// Create a room to the right of room A.
 			// Nondirectional entrance. Never accessible (except at game start).
 			doorC_None.setExit(400, 350);
@@ -191,13 +200,25 @@
 			doorE_Left.rotation = 270;
 			doorE_Left.containedObjects = doorE_None.containedObjects;
 			
+			// Create a room above of room B.
+			// Nondirectional entrance. Never accessible (except at game start).
+			doorF_None.setExit(400, 350);
+			doorF_None.containedObjects.push(new UseableObject(player, 400, 350, 0, false, "floor"));
+			doorF_None.containedObjects.push(new UseableObject(player, 400, 300, 100, true, "tardis"));
+			doorF_None.containedObjects.push(doorB_Down);
+			// An entrance from the below, going up into this room.
+			doorF_Up.setExit(700, 600);
+			doorF_Up.stretch(100, 100);
+			doorF_Up.containedObjects = doorF_None.containedObjects;
+			
 			// Start in the beginning room, and add all doors create to the 'doors' vector.
 			doorA_None.openDoor();
 			doors.push(doorA_None); doors.push(doorA_Down); doors.push(doorA_Left); doors.push(doorA_Up); doors.push(doorA_Right)
-			doors.push(doorB_Up);
+			doors.push(doorB_Up); doors.push(doorB_Down);
 			doors.push(doorC_Right);
 			doors.push(doorD_Down);
 			doors.push(doorE_Left);
+			doors.push(doorF_Up);
 		}
 		
 		// Play the background music.

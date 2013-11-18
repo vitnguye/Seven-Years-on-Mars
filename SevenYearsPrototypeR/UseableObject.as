@@ -40,6 +40,9 @@
 					stretch(100, 200);
 					interactSnd = new PageFlip();
 					break;
+				case "clock":
+					stretch(30, 30);
+					break;
 				case "co2Scrubber":
 					stretch(75,125);
 					break;
@@ -171,6 +174,22 @@
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
 						cooldownCounter = 90;
+						this.alpha = 0.6;
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.5);
+						
+						if(player.mainRef.soundOn){ interactSnd.play(); }
+					}
+					break;
+				case "clock":
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && verifyCollision(player.hand)){
+						cooldownCounter = 50;
 						this.alpha = 0.6;
 						
 						// Effect the player's sanity appropriately.
@@ -585,7 +604,7 @@
 				case "tardis":
 					// Only allow this object to exist when player sanity is low enough and the player is not occupying
 					//	the same space as this object would.
-					if(player.sanity >= 25 || ((this.alpha < 0) && verifyCollision(player))){
+					if(player.sanity >= 10 || ((this.alpha < 0) && verifyCollision(player))){
 						if(collisionEnabled){ this.alpha = -2; }
 						else if(this.alpha != -2){ this.alpha = -1; }
 						collisionEnabled = false;
@@ -598,15 +617,14 @@
 					this.alpha = 1.0;
 					// Constantly check for collision with the player's hand when the player is attempting interaction.
 					if(player.spacePressed && verifyCollision(player.hand)){
-						cooldownCounter = 60;
+						cooldownCounter = 999999999;
 						this.alpha = rand(0, 1);
 						
 						// Effect the player's sanity appropriately.
 						player.sanity += sanityEffect;
 						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
-						// Decrease the effect of this object every time it is used.
-						sanityEffect = (int)(sanityEffect*0.666);
-						
+						//this.parent.removeChild(this);
+						this.visible = false;
 						if(player.mainRef.soundOn){ interactSnd.play(); }
 					}
 					break;
