@@ -22,10 +22,10 @@
 		public function Main():void{
 			soundOn = false;
 			menuMusic = new Sound();
-			menuMusic.load(new URLRequest("Assets/Music/Light Hearted.mp3"));
+			menuMusic = new LightHearted();
 			backgroundMusic = new Sound();
-			//backgroundMusic.load(new URLRequest("Assets/Music/Windy.mp3"));
-			backgroundMusic.load(new URLRequest("Assets/Music/Living in the Sunlight Loving in the Moonlight.mp3"));
+			//backgroundMusic = new Windy();
+			backgroundMusic = new LivingintheSunlightLovingintheMoonlight();
 			sanitybar = new SanityBar(700, 30);
 			stage.addChild(sanitybar);
 			
