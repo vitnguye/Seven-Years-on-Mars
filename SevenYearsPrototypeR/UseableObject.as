@@ -126,6 +126,9 @@
 					stretch(50, 25);
 					interactSnd = new TalkingBass();
 					break;
+				case "tardis":
+					stretch(50, 100);
+					break;
 				case "television":
 					stretch(50, 80);
 					break;
@@ -575,6 +578,34 @@
 						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
 						// Decrease the effect of this object every time it is used.
 						sanityEffect = (int)(sanityEffect*0.7);
+						
+						if(player.mainRef.soundOn){ interactSnd.play(); }
+					}
+					break;
+				case "tardis":
+					// Only allow this object to exist when player sanity is low enough and the player is not occupying
+					//	the same space as this object would.
+					if(player.sanity >= 25 || ((this.alpha < 0) && verifyCollision(player))){
+						if(collisionEnabled){ this.alpha = -2; }
+						else if(this.alpha != -2){ this.alpha = -1; }
+						collisionEnabled = false;
+						break;
+					}
+					else{
+						if(this.alpha == -2){ collisionEnabled = true; }
+						this.alpha = 1.0;
+					}
+					this.alpha = 1.0;
+					// Constantly check for collision with the player's hand when the player is attempting interaction.
+					if(player.spacePressed && verifyCollision(player.hand)){
+						cooldownCounter = 60;
+						this.alpha = rand(0, 1);
+						
+						// Effect the player's sanity appropriately.
+						player.sanity += sanityEffect;
+						stage.addChild(new NumericalUpdate(x, y, sanityEffect));
+						// Decrease the effect of this object every time it is used.
+						sanityEffect = (int)(sanityEffect*0.666);
 						
 						if(player.mainRef.soundOn){ interactSnd.play(); }
 					}
