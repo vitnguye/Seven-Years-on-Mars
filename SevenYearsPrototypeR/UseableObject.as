@@ -84,6 +84,7 @@
 					break;
 				case "pony":
 					stretch(100, 75);
+					interactSnd = new Neigh();
 					break;
 				case "robotArm":
 					stretch(75,100);
@@ -112,9 +113,11 @@
 					break;
 				case "spinningChair_1":
 					stretch(50, 60);
+					interactSnd = new ChairSqueak();
 					break;
 				case "spinningChair_2":
 					stretch(50, 60);
+					interactSnd = new ChairSqueak();
 					break;
 				case "steelTable":
 					stretch(200, 100);
